@@ -12,7 +12,7 @@ const temp: Environment_14205 = {
   ObjectID: LwM2MObjectID.Environment_14205,
   ObjectVersion: "1.0",
   Resources: {
-    "0": 21.7, // Temperature
+    "0": 10 + Math.random() * 20, // Temperature
     "99": Math.floor(Date.now() / 1000), // Unix time in seconds
   },
 };
