@@ -38,18 +38,41 @@ const mqttClient = mqtt.connect({
   ca: readFileSync(path.join(process.cwd(), "AmazonRootCA1.pem"), "utf-8"),
 });
 
-mqttClient.on("connect", () => {
+mqttClient.on("connect", async () => {
   console.log("connected");
 
   const payload = JSON.stringify(maybeSenML.senML);
   const topic = `${clientId}/lwm2m-gateway/senml/ntn1`;
+  const acceptedTopic = `${clientId}/lwm2m-gateway/senml/+/accepted`;
+  const rejectedTopic = `${clientId}/lwm2m-gateway/senml/+/rejected`;
+
+  await new Promise<void>((resolve, reject) =>
+    mqttClient.subscribe([acceptedTopic, rejectedTopic], { qos: 1 }, (err) => {
+      if (err) reject(err);
+      else resolve();
+    })
+  );
+
+  console.log("subscribed", acceptedTopic);
+  console.log("subscribed", rejectedTopic);
+
+  mqttClient.on("message", (topic, message) => {
+    mqttClient.end();
+    console.log(topic);
+    if (topic.endsWith("/accepted")) {
+      console.log("accepted", message.toString());
+      process.exit(0);
+    } else if (topic.endsWith("/rejected")) {
+      console.log("rejected", message.toString());
+      process.exit(1);
+    }
+  });
 
   mqttClient.publish(topic, payload, { qos: 1 }, (err) => {
     if (err) {
       throw new Error("Failed to publish: " + err);
     }
     console.log("published", topic, payload);
-    mqttClient.end();
   });
 });
 
