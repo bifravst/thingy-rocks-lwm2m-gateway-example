@@ -6,13 +6,18 @@
   "author": "Nordic Semiconductor ASA | nordicsemi.no",
   "license": "BSD-3-Clause",
   "scripts": {
-    "start": "node --experimental-transform-types --no-warnings publish.ts"
+    "start": "node --experimental-transform-types --no-warnings publish.ts",
+    "prepare": "check-node-version --package"
   },
   "dependencies": {
     "@hello.nrfcloud.com/proto-map": "16.3.0",
     "mqtt": "5.10.3"
   },
   "engines": {
-    "node": ">=22.7.0"
+    "node": ">=22.7.0",
+    "npm": ">=12.0.2 <13"
+  },
+  "devDependencies": {
+    "check-node-version": "4.2.1"
   }
 }
