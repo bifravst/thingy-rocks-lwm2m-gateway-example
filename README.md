@@ -14,5 +14,5 @@ The supported LwM2M objects are defined in
 
 ## Node & NPM
 
-This project requires Node.js `>=22.7.0` and npm `>=12.0.2 <13` (enforced via
+This project requires Node.js `>=24.19.0 <25` and npm `>=12.0.2 <13` (enforced via
 `check-node-version` from the `prepare` script).

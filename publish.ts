@@ -1,5 +1,5 @@
 import mqtt from "mqtt";
-import cert from "./certificate.json" assert { type: "json" };
+import cert from "./certificate.json" with { type: "json" };
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { lwm2mToSenML } from "@hello.nrfcloud.com/proto-map/senml";
@@ -20,7 +20,7 @@ const maybeSenML = lwm2mToSenML(temp);
 
 if ("errors" in maybeSenML) {
   throw new Error(
-    "Failed to convert LwM2M to SenML: " + JSON.stringify(maybeSenML.errors)
+    "Failed to convert LwM2M to SenML: " + JSON.stringify(maybeSenML.errors),
   );
 }
 
@@ -50,7 +50,7 @@ mqttClient.on("connect", async () => {
     mqttClient.subscribe([acceptedTopic, rejectedTopic], { qos: 1 }, (err) => {
       if (err) reject(err);
       else resolve();
-    })
+    }),
   );
 
   console.log("subscribed", acceptedTopic);
